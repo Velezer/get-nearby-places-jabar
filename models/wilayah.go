@@ -3,7 +3,14 @@ package models
 import (
 	"jabar-nearby-places/dataset"
 	"jabar-nearby-places/utils"
+	"strings"
 	"sync"
+)
+
+const (
+	LEVEL_KABKOTA       = "Kabupaten/Kota"
+	LEVEL_KECAMATAN     = "Kecamatan"
+	LEVEL_KELURAHANDESA = "Kelurahan/Desa"
 )
 
 type Wilayah struct {
@@ -26,21 +33,21 @@ func LoadWilayah() (ws []Wilayah, err error) {
 		wg.Add(3)
 		go addWs(&ws, Wilayah{
 			Name:      v.Bps_kota_nama,
-			Level:     "Kabupaten/Kota",
+			Level:     LEVEL_KABKOTA,
 			Code:      v.Kemendagri_kota_kode,
 			Latitude:  utils.ParseFloat64(v.Latitude, -99),
 			Longitude: utils.ParseFloat64(v.Longitude, -99),
 		}, &wg, &m)
 		go addWs(&ws, Wilayah{
 			Name:      v.Kemendagri_kecamatan_nama,
-			Level:     "Kecamatan",
+			Level:     LEVEL_KECAMATAN,
 			Code:      v.Kemendagri_kecamatan_kode,
 			Latitude:  utils.ParseFloat64(v.Latitude, -99),
 			Longitude: utils.ParseFloat64(v.Longitude, -99),
 		}, &wg, &m)
 		go addWs(&ws, Wilayah{
 			Name:      v.Kemendagri_kelurahan_nama,
-			Level:     "Kelurahan/Desa",
+			Level:     LEVEL_KELURAHANDESA,
 			Code:      v.Kemendagri_kelurahan_kode,
 			Latitude:  utils.ParseFloat64(v.Latitude, -99),
 			Longitude: utils.ParseFloat64(v.Longitude, -99),
@@ -66,7 +73,9 @@ func unique(slice []Wilayah) []Wilayah {
 
 func addWs(ws *[]Wilayah, w Wilayah, wg *sync.WaitGroup, m *sync.Mutex) {
 	m.Lock()
-	*ws = append(*ws, w)
+	if len(w.Name) > 0 && !strings.Contains(w.Name, "BELUM TERIDENTIFIKASI") {
+		*ws = append(*ws, w)
+	}
 	m.Unlock()
 	wg.Done()
 }

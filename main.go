@@ -6,14 +6,15 @@ import (
 )
 
 func main() {
-	wilayahs, err := models.LoadWilayah()
+	ws, err := models.LoadWilayah()
 	if err != nil {
 		panic(err)
 	}
-	for _, v := range wilayahs {
-		fmt.Println(v)
-	}
 
+	ps := models.GeneratePlaces(ws)
+	for _, v := range ps {
+		fmt.Println(v.Name)
+	}
 	// r := routes.SetupRouter()
 	// r.Run()
 }
