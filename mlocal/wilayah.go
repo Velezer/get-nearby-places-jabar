@@ -1,4 +1,4 @@
-package models
+package mlocal
 
 import (
 	"jabar-nearby-places/dataset"

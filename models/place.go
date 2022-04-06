@@ -1,117 +1,38 @@
 package models
 
 import (
-	"fmt"
-	"strings"
+	"jabar-nearby-places/mlocal"
 	"sync"
 )
 
 type Place struct {
-	// baseModel
-	Name      string
-	Category  string // Category
-	Latitude  float64
-	Longitude float64
+	BaseModel
+	Name       string   `json:"name" gorm:"unique"`
+	CategoryID uint     `json:"category_id"`
+	Category   Category `json:"-"`
+	Latitude   float64  `json:"latitude"`
+	Longitude  float64  `json:"longitude"`
 }
 
-func addPs(ps *[]Place, w Place, wg *sync.WaitGroup, m *sync.Mutex) {
+func addPlaces(ps *[]Place, p Place, wg *sync.WaitGroup, m *sync.Mutex) {
 	m.Lock()
-	*ps = append(*ps, w)
+	*ps = append(*ps, p)
 	m.Unlock()
 	wg.Done()
 }
 
-func GeneratePlaces(ws []Wilayah) (ps []Place) {
+func PreparePlaces(pslocal []mlocal.Place, catmap map[string]uint) (ps []Place) {
 	var wg sync.WaitGroup
 	var m sync.Mutex
-	for _, w := range ws {
-		if w.Level == LEVEL_KABKOTA {
-			p := Place{}
-			p.Name = fmt.Sprintf("Kantor Pemerintahan %v", w.Name)
-			p.Name = strings.Title(strings.ToLower(p.Name))
-			p.Category = "Kantor Pemerintah Kabupaten/Kota"
-			p.Latitude = w.Latitude
-			p.Longitude = w.Longitude
-			wg.Add(1)
-			go addPs(&ps, p, &wg, &m)
-
-			for i := 1; i <= 3; i++ {
-				p := Place{}
-				p.Name = fmt.Sprintf("Rumah Sakit %v %v", w.Name, i)
-				p.Name = strings.Title(strings.ToLower(p.Name))
-				p.Category = "Rumah Sakit"
-				p.Latitude = w.Latitude
-				p.Longitude = w.Longitude
-				wg.Add(1)
-				go addPs(&ps, p, &wg, &m)
-			}
-			for i := 1; i <= 20; i++ {
-				p := Place{}
-				p.Name = fmt.Sprintf("SMA %v %v", strings.Title(strings.ToLower(w.Name)), i)
-				p.Category = "Sekolah Menengah Atas"
-				p.Latitude = w.Latitude
-				p.Longitude = w.Longitude
-				wg.Add(1)
-				go addPs(&ps, p, &wg, &m)
-			}
-		}
-		if w.Level == LEVEL_KECAMATAN {
-			p := Place{}
-			p.Name = fmt.Sprintf("Kantor Pemerintah %v", strings.Title(strings.ToLower(w.Name)))
-			p.Category = "Kantor Pemerintah Kecamatan"
-			p.Latitude = w.Latitude
-			p.Longitude = w.Longitude
-			wg.Add(1)
-			go addPs(&ps, p, &wg, &m)
-			for i := 1; i <= 5; i++ {
-				p := Place{}
-				p.Name = fmt.Sprintf("Puskesmas %v %v", strings.Title(strings.ToLower(w.Name)), i)
-				p.Category = "Puskesmas"
-				p.Latitude = w.Latitude
-				p.Longitude = w.Longitude
-				wg.Add(1)
-				go addPs(&ps, p, &wg, &m)
-			}
-			for i := 1; i <= 3; i++ {
-				p := Place{}
-				p.Name = fmt.Sprintf("SMP %v %v", strings.Title(strings.ToLower(w.Name)), i)
-				p.Category = "Sekolah Menengah Pertama"
-				p.Latitude = w.Latitude
-				p.Longitude = w.Longitude
-				wg.Add(1)
-				go addPs(&ps, p, &wg, &m)
-			}
-
-		}
-		if w.Level == LEVEL_KELURAHANDESA {
-			p := Place{}
-			p.Name = fmt.Sprintf("Kantor Pemerintahan %v", strings.Title(strings.ToLower(w.Name)))
-			p.Category = "Kantor Pemerintah Kelurahan/Desa"
-			p.Latitude = w.Latitude
-			p.Longitude = w.Longitude
-			wg.Add(1)
-			go addPs(&ps, p, &wg, &m)
-
-			for i := 1; i <= 5; i++ {
-				p := Place{}
-				p.Name = fmt.Sprintf("SD %v %v", strings.Title(strings.ToLower(w.Name)), i)
-				p.Category = "Sekolah Dasar"
-				p.Latitude = w.Latitude
-				p.Longitude = w.Longitude
-				wg.Add(1)
-				go addPs(&ps, p, &wg, &m)
-			}
-			for i := 1; i <= 20; i++ {
-				p := Place{}
-				p.Name = fmt.Sprintf("Tempat Ibadah %v %v", strings.Title(strings.ToLower(w.Name)), i)
-				p.Category = "Tempat Ibadah"
-				p.Latitude = w.Latitude
-				p.Longitude = w.Longitude
-				wg.Add(1)
-				go addPs(&ps, p, &wg, &m)
-			}
-		}
-		wg.Wait()
+	for _, p := range pslocal {
+		wg.Add(1)
+		addPlaces(&ps, Place{
+			Name:       p.Name,
+			CategoryID: catmap[p.Category],
+			Latitude:   p.Latitude,
+			Longitude:  p.Longitude,
+		}, &wg, &m)
 	}
+	wg.Wait()
 	return
 }
