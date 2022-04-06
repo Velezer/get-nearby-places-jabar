@@ -1,9 +1,10 @@
 package main
 
-import "jabar-nearby-places/seed"
+import "jabar-nearby-places/routes"
 
 func main() {
-	seed.Begin()
-	// r := routes.SetupRouter()
-	// r.Run()
+	// seed.Begin()
+
+	r := routes.SetupRouter()
+	r.Run()
 }

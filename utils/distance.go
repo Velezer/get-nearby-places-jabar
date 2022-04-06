@@ -1,6 +1,8 @@
 package utils
 
-import "math"
+import (
+	"math"
+)
 
 // i got from this link https://gist.github.com/cdipaolo/d3f8db3848278b49db68
 func hsin(theta float64) float64 {

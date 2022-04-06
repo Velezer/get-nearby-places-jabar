@@ -3,7 +3,9 @@ package services
 import (
 	"html"
 	"jabar-nearby-places/models"
+	"jabar-nearby-places/utils"
 	"strings"
+	"sync"
 
 	"gorm.io/gorm"
 )
@@ -24,4 +26,30 @@ func (s place) Save(m *models.Place) (*models.Place, error) {
 }
 func (s place) SaveMany(ms *[]models.Place) error {
 	return s.db.Create(&ms).Error
+}
+
+func (s place) FindAll() (ms *[]models.Place, err error) {
+	err = s.db.Session(&gorm.Session{PrepareStmt: true}).Find(&ms).Error
+	return
+}
+
+func (s place) FilterByDistance(ps []models.Place, lat, lon float64) (ms []models.Place) {
+	var wg sync.WaitGroup
+	var m sync.Mutex
+	for _, f := range ps {
+		wg.Add(1)
+		go addIfDistanceLTE5KM(&ms, f, lat, lon, &wg, &m)
+	}
+	wg.Wait()
+	return
+}
+
+func addIfDistanceLTE5KM(ms *[]models.Place, p models.Place, lat, lon float64, wg *sync.WaitGroup, m *sync.Mutex) {
+	d := utils.DistanceKM(p.Latitude, p.Longitude, lat, lon)
+	if d <= 5 {
+		m.Lock()
+		*ms = append(*ms, p)
+		m.Unlock()
+	}
+	wg.Done()
 }
