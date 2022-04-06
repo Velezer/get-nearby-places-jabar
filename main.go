@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"jabar-nearby-places/models"
-	"log"
 )
 
 func main() {
@@ -14,7 +13,6 @@ func main() {
 	for _, v := range wilayahs {
 		fmt.Println(v)
 	}
-	log.Fatal()
 
 	// r := routes.SetupRouter()
 	// r.Run()
