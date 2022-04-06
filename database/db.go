@@ -29,20 +29,5 @@ func ConnectDatabase() *gorm.DB {
 		&models.Category{},
 	)
 
-	if db.Migrator().HasTable(&models.Category{}) {
-		cs := []models.Category{
-			{Name: models.CATEGORY_KANTOR_PEM_KABKOTA},
-			{Name: models.CATEGORY_RUMAH_SAKIT},
-			{Name: models.CATEGORY_SMA},
-			{Name: models.CATEGORY_PUSKESMAS},
-			{Name: models.CATEGORY_SMP},
-			{Name: models.CATEGORY_KANTOR_PEM_KECAMATAN},
-			{Name: models.CATEGORY_SD},
-			{Name: models.CATEGORY_TEMPAT_IBADAH},
-			{Name: models.CATEGORY_KANTOR_PEM_KELURAHANDESA},
-		}
-		db.Create(&cs)
-	}
-
 	return db
 }

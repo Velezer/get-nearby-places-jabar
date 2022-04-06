@@ -10,4 +10,5 @@ type placeIface interface {
 type categoryIface interface {
 	FindAll() (categories *[]models.Category, err error)
 	FindOne(name string) (categories *models.Category, err error)
+	SaveMany(ms *[]models.Category) error
 }

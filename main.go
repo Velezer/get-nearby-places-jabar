@@ -1,17 +1,9 @@
 package main
 
-import (
-	"fmt"
-	"jabar-nearby-places/mlocal"
-	"jabar-nearby-places/models"
-	"jabar-nearby-places/services"
-	"sync"
-)
+import "jabar-nearby-places/seed"
 
 func main() {
-	seedPlaces()
+	seed.Begin()
 	// r := routes.SetupRouter()
 	// r.Run()
 }
-
-

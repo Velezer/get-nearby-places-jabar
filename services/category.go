@@ -26,3 +26,6 @@ func (s category) FindOne(name string) (category *models.Category, err error) {
 
 	return
 }
+func (s category) SaveMany(ms *[]models.Category) error {
+	return s.db.Create(&ms).Error
+}
