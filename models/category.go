@@ -8,7 +8,7 @@ const (
 	CATEGORY_SMP                      = "Sekolah Menengah Pertama"
 	CATEGORY_KANTOR_PEM_KECAMATAN     = "Kantor Pemerintah Kecamatan"
 	CATEGORY_SD                       = "Sekolah Dasar"
-	CATEGORY_TEPAT_IBADAH             = "Tempat Ibadah"
+	CATEGORY_TEMPAT_IBADAH            = "Tempat Ibadah"
 	CATEGORY_KANTOR_PEM_KELURAHANDESA = "Kantor Pemerintah Kelurahan/Desa"
 )
 

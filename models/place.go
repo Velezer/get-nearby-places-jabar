@@ -1,7 +1,8 @@
 package models
 
 import (
-	"jabar-nearby-places/mlocal"
+	"fmt"
+	"strings"
 	"sync"
 )
 
@@ -14,25 +15,117 @@ type Place struct {
 	Longitude  float64  `json:"longitude"`
 }
 
-func addPlaces(ps *[]Place, p Place, wg *sync.WaitGroup, m *sync.Mutex) {
+func addPs(ps *[]Place, p Place, wg *sync.WaitGroup, m *sync.Mutex) {
 	m.Lock()
 	*ps = append(*ps, p)
 	m.Unlock()
 	wg.Done()
 }
 
-func PreparePlaces(pslocal []mlocal.Place, catmap map[string]uint) (ps []Place) {
+// catmap is "category map" catmap[name]catid
+func GeneratePlaces(ws []Wilayah, catmap map[string]uint) (ps []Place) {
 	var wg sync.WaitGroup
 	var m sync.Mutex
-	for _, p := range pslocal {
-		wg.Add(1)
-		addPlaces(&ps, Place{
-			Name:       p.Name,
-			CategoryID: catmap[p.Category],
-			Latitude:   p.Latitude,
-			Longitude:  p.Longitude,
-		}, &wg, &m)
+	for _, w := range ws {
+		if w.Level == LEVEL_KABKOTA {
+			p := Place{}
+			p.Name = fmt.Sprintf("Kantor Pemerintahan %v", w.Name)
+			p.Name = strings.Title(strings.ToLower(p.Name))
+			p.CategoryID = catmap[CATEGORY_KANTOR_PEM_KABKOTA]
+			p.Latitude = w.Latitude
+			p.Longitude = w.Longitude
+			wg.Add(1)
+			go addPs(&ps, p, &wg, &m)
+
+			for i := 1; i <= 3; i++ {
+				p := Place{}
+				p.Name = fmt.Sprintf("Rumah Sakit %v %v", w.Name, i)
+				p.Name = strings.Title(strings.ToLower(p.Name))
+				p.CategoryID = catmap[CATEGORY_RUMAH_SAKIT]
+				p.Latitude = w.Latitude
+				p.Longitude = w.Longitude
+				wg.Add(1)
+				go addPs(&ps, p, &wg, &m)
+			}
+			for i := 1; i <= 20; i++ {
+				p := Place{}
+				p.Name = fmt.Sprintf("SMA %v %v", strings.Title(strings.ToLower(w.Name)), i)
+				p.CategoryID = catmap[CATEGORY_SMA]
+				p.Latitude = w.Latitude
+				p.Longitude = w.Longitude
+				wg.Add(1)
+				go addPs(&ps, p, &wg, &m)
+			}
+		}
+		if w.Level == LEVEL_KECAMATAN {
+			p := Place{}
+			p.Name = fmt.Sprintf("Kantor Pemerintahan Kecamatan %v", strings.Title(strings.ToLower(w.Name)))
+			p.CategoryID = catmap[CATEGORY_KANTOR_PEM_KECAMATAN]
+			p.Latitude = w.Latitude
+			p.Longitude = w.Longitude
+			wg.Add(1)
+			go addPs(&ps, p, &wg, &m)
+			for i := 1; i <= 5; i++ {
+				p := Place{}
+				p.Name = fmt.Sprintf("Puskesmas %v %v", strings.Title(strings.ToLower(w.Name)), i)
+				p.CategoryID = catmap[CATEGORY_PUSKESMAS]
+				p.Latitude = w.Latitude
+				p.Longitude = w.Longitude
+				wg.Add(1)
+				go addPs(&ps, p, &wg, &m)
+			}
+			for i := 1; i <= 3; i++ {
+				p := Place{}
+				p.Name = fmt.Sprintf("SMP %v %v", strings.Title(strings.ToLower(w.Name)), i)
+				p.CategoryID = catmap[CATEGORY_SMP]
+				p.Latitude = w.Latitude
+				p.Longitude = w.Longitude
+				wg.Add(1)
+				go addPs(&ps, p, &wg, &m)
+			}
+		}
+		if w.Level == LEVEL_KELURAHANDESA {
+			p := Place{}
+			p.Name = fmt.Sprintf("Kantor Pemerintahan Desa %v", strings.Title(strings.ToLower(w.Name)))
+			p.CategoryID = catmap[CATEGORY_KANTOR_PEM_KELURAHANDESA]
+			p.Latitude = w.Latitude
+			p.Longitude = w.Longitude
+			wg.Add(1)
+			go addPs(&ps, p, &wg, &m)
+
+			for i := 1; i <= 5; i++ {
+				p := Place{}
+				p.Name = fmt.Sprintf("SD %v %v", strings.Title(strings.ToLower(w.Name)), i)
+				p.CategoryID = catmap[CATEGORY_SD]
+				p.Latitude = w.Latitude
+				p.Longitude = w.Longitude
+				wg.Add(1)
+				go addPs(&ps, p, &wg, &m)
+			}
+			for i := 1; i <= 20; i++ {
+				p := Place{}
+				p.Name = fmt.Sprintf("Tempat Ibadah %v %v", strings.Title(strings.ToLower(w.Name)), i)
+				p.CategoryID = catmap[CATEGORY_TEMPAT_IBADAH]
+				p.Latitude = w.Latitude
+				p.Longitude = w.Longitude
+				wg.Add(1)
+				go addPs(&ps, p, &wg, &m)
+			}
+		}
 	}
 	wg.Wait()
+	ps = uniquePs(ps)
 	return
+}
+
+func uniquePs(slice []Place) []Place {
+	keys := make(map[string]bool)
+	list := []Place{}
+	for _, entry := range slice {
+		if _, value := keys[entry.Name]; !value {
+			keys[entry.Name] = true
+			list = append(list, entry)
+		}
+	}
+	return list
 }

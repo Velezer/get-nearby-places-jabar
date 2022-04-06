@@ -1,4 +1,4 @@
-package mlocal
+package models
 
 import (
 	"jabar-nearby-places/dataset"
@@ -13,6 +13,7 @@ const (
 	LEVEL_KELURAHANDESA = "Kelurahan/Desa"
 )
 
+// this model is not included in database
 type Wilayah struct {
 	Name      string
 	Level     string
@@ -55,11 +56,11 @@ func LoadWilayah() (ws []Wilayah, err error) {
 	}
 	wg.Wait()
 
-	ws = unique(ws)
+	ws = uniqueWs(ws)
 	return
 }
 
-func unique(slice []Wilayah) []Wilayah {
+func uniqueWs(slice []Wilayah) []Wilayah {
 	keys := make(map[string]bool)
 	list := []Wilayah{}
 	for _, entry := range slice {

@@ -38,7 +38,7 @@ func ConnectDatabase() *gorm.DB {
 			{Name: models.CATEGORY_SMP},
 			{Name: models.CATEGORY_KANTOR_PEM_KECAMATAN},
 			{Name: models.CATEGORY_SD},
-			{Name: models.CATEGORY_TEPAT_IBADAH},
+			{Name: models.CATEGORY_TEMPAT_IBADAH},
 			{Name: models.CATEGORY_KANTOR_PEM_KELURAHANDESA},
 		}
 		db.Create(&cs)
