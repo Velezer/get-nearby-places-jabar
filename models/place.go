@@ -8,12 +8,13 @@ import (
 
 type Place struct {
 	BaseModel
-	Name         string   `json:"name" gorm:"unique"`
-	CategoryID   uint     `json:"category_id"`
-	Category     Category `json:"-"`
-
-	Latitude     float64  `json:"latitude"`
-	Longitude    float64  `json:"longitude"`
+	Name       string   `json:"name" gorm:"unique"`
+	CategoryID uint     `json:"category_id"`
+	Category   Category `json:"-"`
+	// CityName     string   `json:"city_name"`
+	// DistrictName string   `json:"district_name"`
+	Latitude  float64 `json:"latitude"`
+	Longitude float64 `json:"longitude"`
 }
 
 func addPs(ps *[]Place, p Place, wg *sync.WaitGroup, m *sync.Mutex) {

@@ -13,7 +13,7 @@ func (s cache) Get(key string) interface{} {
 }
 
 func (s cache) Clear() {
-	for k, _ := range s._m {
+	for k := range s._m {
 		s._m[k] = nil
 	}
 }
