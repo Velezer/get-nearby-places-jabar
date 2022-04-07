@@ -16,7 +16,7 @@ type place struct {
 }
 
 func (s place) Save(m *models.Place) (*models.Place, error) {
-	go CacheService.Clear()
+	go CacheService.ClearAll()
 	m.Name = html.EscapeString(strings.TrimSpace(m.Name))
 
 	err := s.db.Create(&m).Error
@@ -27,7 +27,7 @@ func (s place) Save(m *models.Place) (*models.Place, error) {
 	return m, nil
 }
 func (s place) SaveMany(ms *[]models.Place) error {
-	go CacheService.Clear()
+	go CacheService.ClearAll()
 	return s.db.Create(&ms).Error
 }
 
@@ -38,7 +38,7 @@ func (s place) FindAll(categoryId uint) (ms *[]models.Place, err error) {
 		return cache, nil
 	}
 	err = s.db.Session(&gorm.Session{PrepareStmt: true}).Find(&ms, models.Place{CategoryID: categoryId}).Error
-	CacheService.Set("place:findall:"+cid, ms)
+	CacheService.Set("place:findall:"+cid, ms, 60*5) // cache the result for 5 minutes
 	return
 }
 

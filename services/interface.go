@@ -17,8 +17,9 @@ type (
 	}
 
 	cacheIface interface {
-		Set(key string, value interface{})
+		Set(key string, value interface{}, ttls uint)
 		Get(key string) interface{}
-		Clear()
+		ClearAll()
+		Clear(key string)
 	}
 )
