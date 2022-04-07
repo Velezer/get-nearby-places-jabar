@@ -9,6 +9,7 @@ import (
 var db *gorm.DB
 var PlaceService placeIface
 var CategoryService categoryIface
+var CacheService cacheIface
 
 func init() {
 	if db == nil {
@@ -21,6 +22,9 @@ func init() {
 
 	if PlaceService == nil {
 		PlaceService = &place{db}
+	}
+	if CacheService == nil {
+		CacheService = &cache{make(map[string]interface{})}
 	}
 
 }

@@ -15,6 +15,5 @@ const (
 type Category struct {
 	BaseModel
 
-	Name   string  `json:"name" gorm:"unique"`
-	Places []Place `json:"places"`
+	Name string `json:"name" gorm:"unique"`
 }
