@@ -2,6 +2,7 @@ package models
 
 import (
 	"fmt"
+	"jabar-nearby-places/utils"
 	"strings"
 	"sync"
 )
@@ -34,11 +35,12 @@ func GeneratePlaces(ws []Wilayah, catmap map[string]uint) (ps []Place) {
 	var m sync.Mutex
 	for _, w := range ws {
 		if w.Level == LEVEL_KABKOTA {
+			point := utils.GenerateRandomLatLon(w.Latitude, w.Longitude, 500, 5000)
 			p := Place{}
 			p.Name = fmt.Sprintf("Kantor Pemerintahan %v", w.Name)
 			p.CategoryID = catmap[CATEGORY_KANTOR_PEM_KABKOTA]
-			p.Latitude = w.Latitude
-			p.Longitude = w.Longitude
+			p.Latitude = point.Latitude
+			p.Longitude = point.Longitude
 			p.CityName = w.CityName
 			p.DistrictName = w.DistrictName
 			p.Name = formatTitle(p.Name)
@@ -48,11 +50,12 @@ func GeneratePlaces(ws []Wilayah, catmap map[string]uint) (ps []Place) {
 			go addPs(&ps, p, &wg, &m)
 
 			for i := 1; i <= 3; i++ {
+				point := utils.GenerateRandomLatLon(w.Latitude, w.Longitude, 500, 5000)
 				p := Place{}
 				p.Name = fmt.Sprintf("Rumah Sakit %v %v", w.Name, i)
 				p.CategoryID = catmap[CATEGORY_RUMAH_SAKIT]
-				p.Latitude = w.Latitude
-				p.Longitude = w.Longitude
+				p.Latitude = point.Latitude
+				p.Longitude = point.Longitude
 				p.CityName = w.CityName
 				p.DistrictName = w.DistrictName
 				p.Name = formatTitle(p.Name)
@@ -62,11 +65,12 @@ func GeneratePlaces(ws []Wilayah, catmap map[string]uint) (ps []Place) {
 				go addPs(&ps, p, &wg, &m)
 			}
 			for i := 1; i <= 20; i++ {
+				point := utils.GenerateRandomLatLon(w.Latitude, w.Longitude, 500, 5000)
 				p := Place{}
 				p.Name = fmt.Sprintf("%v %v", w.Name, i)
 				p.CategoryID = catmap[CATEGORY_SMA]
-				p.Latitude = w.Latitude
-				p.Longitude = w.Longitude
+				p.Latitude = point.Latitude
+				p.Longitude = point.Longitude
 				p.CityName = w.CityName
 				p.DistrictName = w.DistrictName
 				p.Name = formatTitle(p.Name)
@@ -77,11 +81,12 @@ func GeneratePlaces(ws []Wilayah, catmap map[string]uint) (ps []Place) {
 			}
 		}
 		if w.Level == LEVEL_KECAMATAN {
+			point := utils.GenerateRandomLatLon(w.Latitude, w.Longitude, 500, 5000)
 			p := Place{}
 			p.Name = fmt.Sprintf("Kantor Pemerintahan Kecamatan %v", w.Name)
 			p.CategoryID = catmap[CATEGORY_KANTOR_PEM_KECAMATAN]
-			p.Latitude = w.Latitude
-			p.Longitude = w.Longitude
+			p.Latitude = point.Latitude
+			p.Longitude = point.Longitude
 			p.CityName = w.CityName
 			p.DistrictName = w.DistrictName
 			p.Name = formatTitle(p.Name)
@@ -90,11 +95,12 @@ func GeneratePlaces(ws []Wilayah, catmap map[string]uint) (ps []Place) {
 			wg.Add(1)
 			go addPs(&ps, p, &wg, &m)
 			for i := 1; i <= 5; i++ {
+				point := utils.GenerateRandomLatLon(w.Latitude, w.Longitude, 500, 5000)
 				p := Place{}
 				p.Name = fmt.Sprintf("Puskesmas %v %v", w.Name, i)
 				p.CategoryID = catmap[CATEGORY_PUSKESMAS]
-				p.Latitude = w.Latitude
-				p.Longitude = w.Longitude
+				p.Latitude = point.Latitude
+				p.Longitude = point.Longitude
 				p.CityName = w.CityName
 				p.DistrictName = w.DistrictName
 				p.Name = formatTitle(p.Name)
@@ -104,11 +110,12 @@ func GeneratePlaces(ws []Wilayah, catmap map[string]uint) (ps []Place) {
 				go addPs(&ps, p, &wg, &m)
 			}
 			for i := 1; i <= 3; i++ {
+				point := utils.GenerateRandomLatLon(w.Latitude, w.Longitude, 500, 5000)
 				p := Place{}
 				p.Name = fmt.Sprintf("%v %v", w.Name, i)
 				p.CategoryID = catmap[CATEGORY_SMP]
-				p.Latitude = w.Latitude
-				p.Longitude = w.Longitude
+				p.Latitude = point.Latitude
+				p.Longitude = point.Longitude
 				p.CityName = w.CityName
 				p.DistrictName = w.DistrictName
 				p.Name = "SMP " + formatTitle(p.Name)
@@ -119,11 +126,12 @@ func GeneratePlaces(ws []Wilayah, catmap map[string]uint) (ps []Place) {
 			}
 		}
 		if w.Level == LEVEL_KELURAHANDESA {
+			point := utils.GenerateRandomLatLon(w.Latitude, w.Longitude, 500, 5000)
 			p := Place{}
 			p.Name = fmt.Sprintf("Kantor Pemerintahan Desa %v", w.Name)
 			p.CategoryID = catmap[CATEGORY_KANTOR_PEM_KELURAHANDESA]
-			p.Latitude = w.Latitude
-			p.Longitude = w.Longitude
+			p.Latitude = point.Latitude
+			p.Longitude = point.Longitude
 			p.CityName = w.CityName
 			p.DistrictName = w.DistrictName
 			p.Name = formatTitle(p.Name)
@@ -133,11 +141,12 @@ func GeneratePlaces(ws []Wilayah, catmap map[string]uint) (ps []Place) {
 			go addPs(&ps, p, &wg, &m)
 
 			for i := 1; i <= 5; i++ {
+				point := utils.GenerateRandomLatLon(w.Latitude, w.Longitude, 500, 5000)
 				p := Place{}
 				p.Name = fmt.Sprintf("%v %v", w.Name, i)
 				p.CategoryID = catmap[CATEGORY_SD]
-				p.Latitude = w.Latitude
-				p.Longitude = w.Longitude
+				p.Latitude = point.Latitude
+				p.Longitude = point.Longitude
 				p.CityName = w.CityName
 				p.DistrictName = w.DistrictName
 				p.Name = "SD " + formatTitle(p.Name)
@@ -147,11 +156,12 @@ func GeneratePlaces(ws []Wilayah, catmap map[string]uint) (ps []Place) {
 				go addPs(&ps, p, &wg, &m)
 			}
 			for i := 1; i <= 20; i++ {
+				point := utils.GenerateRandomLatLon(w.Latitude, w.Longitude, 500, 5000)
 				p := Place{}
 				p.Name = fmt.Sprintf("Tempat Ibadah %v %v", w.Name, i)
 				p.CategoryID = catmap[CATEGORY_TEMPAT_IBADAH]
-				p.Latitude = w.Latitude
-				p.Longitude = w.Longitude
+				p.Latitude = point.Latitude
+				p.Longitude = point.Longitude
 				p.CityName = w.CityName
 				p.DistrictName = w.DistrictName
 				p.Name = formatTitle(p.Name)
