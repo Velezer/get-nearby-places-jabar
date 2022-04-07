@@ -47,8 +47,8 @@ func seedPlaces() {
 	ps := models.GeneratePlaces(ws, catmap)
 
 	var wg sync.WaitGroup
-	for i := 0; i < len(ps); i += 9000 {
-		j := i + 9000
+	for i := 0; i < len(ps); i += 5000 {
+		j := i + 5000
 		if j >= len(ps) {
 			j = len(ps)
 		}

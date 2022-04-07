@@ -20,6 +20,9 @@ type Wilayah struct {
 	Code      string
 	Latitude  float64
 	Longitude float64
+
+	CityName     string
+	DistrictName string
 }
 
 func LoadWilayah() (ws []Wilayah, err error) {
@@ -33,25 +36,31 @@ func LoadWilayah() (ws []Wilayah, err error) {
 	for _, v := range jabars {
 		wg.Add(3)
 		go addWs(&ws, Wilayah{
-			Name:      v.Bps_kota_nama,
-			Level:     LEVEL_KABKOTA,
-			Code:      v.Kemendagri_kota_kode,
-			Latitude:  utils.ParseFloat64(v.Latitude, -99),
-			Longitude: utils.ParseFloat64(v.Longitude, -99),
+			Name:         v.CityName,
+			Level:        LEVEL_KABKOTA,
+			Code:         v.CityCode,
+			Latitude:     utils.ParseFloat64(v.Latitude, -99),
+			Longitude:    utils.ParseFloat64(v.Longitude, -99),
+			CityName:     v.CityName,
+			DistrictName: "Kecamatan " + v.DistrictName,
 		}, &wg, &m)
 		go addWs(&ws, Wilayah{
-			Name:      v.Kemendagri_kecamatan_nama,
-			Level:     LEVEL_KECAMATAN,
-			Code:      v.Kemendagri_kecamatan_kode,
-			Latitude:  utils.ParseFloat64(v.Latitude, -99),
-			Longitude: utils.ParseFloat64(v.Longitude, -99),
+			Name:         v.DistrictName,
+			Level:        LEVEL_KECAMATAN,
+			Code:         v.DistrictCode,
+			Latitude:     utils.ParseFloat64(v.Latitude, -99),
+			Longitude:    utils.ParseFloat64(v.Longitude, -99),
+			CityName:     v.CityName,
+			DistrictName: "Kecamatan " + v.DistrictName,
 		}, &wg, &m)
 		go addWs(&ws, Wilayah{
-			Name:      v.Kemendagri_kelurahan_nama,
-			Level:     LEVEL_KELURAHANDESA,
-			Code:      v.Kemendagri_kelurahan_kode,
-			Latitude:  utils.ParseFloat64(v.Latitude, -99),
-			Longitude: utils.ParseFloat64(v.Longitude, -99),
+			Name:         v.VillageName,
+			Level:        LEVEL_KELURAHANDESA,
+			Code:         v.VillageCode,
+			Latitude:     utils.ParseFloat64(v.Latitude, -99),
+			Longitude:    utils.ParseFloat64(v.Longitude, -99),
+			CityName:     v.CityName,
+			DistrictName: "Kecamatan " + v.DistrictName,
 		}, &wg, &m)
 	}
 	wg.Wait()
