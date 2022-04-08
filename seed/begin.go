@@ -46,7 +46,7 @@ func seedPlaces() {
 	}
 	ps := models.GeneratePlaces(ws, catmap)
 
-	queue := make(chan int, 1)
+	queue := make(chan int, 3) // max limit goroutines
 	var wg sync.WaitGroup
 	for i := 0; i < len(ps); i += 5000 {
 		j := i + 5000
