@@ -46,6 +46,7 @@ func seedPlaces() {
 	}
 	ps := models.GeneratePlaces(ws, catmap)
 
+	queue := make(chan int, 1)
 	var wg sync.WaitGroup
 	for i := 0; i < len(ps); i += 5000 {
 		j := i + 5000
@@ -54,15 +55,18 @@ func seedPlaces() {
 		}
 		data := ps[i:j]
 		wg.Add(1)
+		queue <- i
 		go func() {
 			err = services.PlaceService.SaveMany(&data)
 			if err != nil && !utils.ErrDuplicate(err) {
 				panic(err)
 			}
+			<-queue
 			wg.Done()
 		}()
 
 	}
+	close(queue)
 	wg.Wait()
 
 }
