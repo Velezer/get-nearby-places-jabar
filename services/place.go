@@ -47,6 +47,7 @@ func (s place) FindAll(categoryId uint) (ms *[]models.Place, err error) {
 }
 
 func (s place) FilterByDistance(ps []models.Place, lat, lon float64) (ms []models.Place) {
+	ms = []models.Place{}
 	var wg sync.WaitGroup
 	var m sync.Mutex
 	for _, f := range ps {
