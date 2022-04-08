@@ -15,6 +15,10 @@ type place struct {
 	db *gorm.DB
 }
 
+func (s place) CountRows() (n int64, err error) {
+	err = s.db.Find(&models.Place{}).Count(&n).Error
+	return
+}
 func (s place) Save(m *models.Place) (*models.Place, error) {
 	go CacheService.ClearAll()
 	m.Name = html.EscapeString(strings.TrimSpace(m.Name))

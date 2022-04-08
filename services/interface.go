@@ -8,6 +8,7 @@ type (
 		SaveMany(m *[]models.Place) error
 		FindAll(categoryId uint) (ps *[]models.Place, err error)
 		FilterByDistance(ps []models.Place, lat, lon float64) (ms []models.Place)
+		CountRows() (n int64, err error)
 	}
 
 	categoryIface interface {
