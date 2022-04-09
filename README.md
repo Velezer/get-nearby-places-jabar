@@ -1,7 +1,7 @@
 # Author
 - Name: Arief Syaifuddin
 - Class: Golang
-- Link Video: ...
+- Link Video: https://youtu.be/I64DtHbpiFo
 - Link Docs (Swagger UI): https://get-nearby-velezer.herokuapp.com/docs/
 
 # Project Requirements
