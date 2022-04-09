@@ -5,7 +5,7 @@
 - Link Docs (Swagger UI): https://get-nearby-velezer.herokuapp.com/docs/
 
 # Project Requirements
-1. Generate Places: You can find the code in https://github.com/Velezer/get-nearby-places-jabar/blob/main/models/place.go
+1. Generate Places: You can find the code in https://github.com/Velezer/get-nearby-places-jabar/blob/main/models/place.go#L33
 2. Search API: You can find the docs in https://get-nearby-velezer.herokuapp.com/docs/
 3. Repository: This is the repository for the project submission
 
