@@ -1,8 +1,8 @@
 # Author
-Name: Arief Syaifuddin
-Class: Golang
-Link Video: 
-Link Docs (Swagger UI): https://get-nearby-velezer.herokuapp.com/docs/
+- Name: Arief Syaifuddin
+- Class: Golang
+- Link Video: ...
+- Link Docs (Swagger UI): https://get-nearby-velezer.herokuapp.com/docs/
 
 # Project Requirements
 1. Generate Places: You can find the code in https://github.com/Velezer/get-nearby-places-jabar/blob/main/models/place.go
